@@ -13,31 +13,34 @@ struct ContentView: View {
     
     var body: some View {
         VStack{
-            HStack {
-
-                ForEach(0..<cardsCount,id: \.self) { index in
-                CardView(content: emojis[index])
-                //ForEach的 range 使用 cardsCount 的初始值设定范围
-                //id:\.self,使用这个范围作为唯一标识符
-                //index 则为变量则为这个元素的索引
-                //in是语法的一部分，表示分隔前面的集合和后面的闭包参数，也指明将遍历集合每个参数所带来的元素值
-                }
-           
-            }
-            .foregroundColor(.orange)
-        
-            HStack{
-                CardAdder
-                Spacer()
-                CardRemover
-    
-            }.font(.headline)
+            Cards
+            CardsCountAdjuster
         }
 
 
         .padding()
     }
+    var Cards:some View{
+        HStack {
+            ForEach(0..<cardsCount,id: \.self) { index in
+            CardView(content: emojis[index])
+            //ForEach的 range 使用 cardsCount 的初始值设定范围
+            //id:\.self,使用这个范围作为唯一标识符
+            //index 则为变量则为这个元素的索引
+            //in是语法的一部分，表示分隔前面的集合和后面的闭包参数，也指明将遍历集合每个参数所带来的元素值
+            }
+           
+        }
+        .foregroundColor(.orange)
+    }
+    var CardsCountAdjuster:some View{
+        HStack{
+            CardAdder
+            Spacer()
+            CardRemover
     
+        }.font(.headline)
+    }
     var CardAdder:some View{
         Button(action: {if cardsCount < emojis.count{
         cardsCount +=  1
