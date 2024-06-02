@@ -16,8 +16,6 @@ struct ContentView: View {
             Cards
             CardsCountAdjuster
         }
-
-
         .padding()
     }
     var Cards:some View{
@@ -41,24 +39,29 @@ struct ContentView: View {
     
         }.font(.headline)
     }
-    var CardAdder:some View{
-        Button(action: {if cardsCount < emojis.count{
-        cardsCount +=  1
-        }
+    
+    func ButtonSimplify(by offset:Int,symbol:String,txt:String)->some View{
+        //by 关键字通常用于指定一个修饰符（modifier）的参数，该修饰符会基于某个值的变化来应用某种效果或行为。
+        //offset单词指偏移量，并指定为整形，方法传递这个值给函数，然后根据这个值来创建按钮并运行逻辑。
+        Button(action: {
+            cardsCount +=  offset
+            //参考cardsCount +=  1，即 cardsCount=cardsCount+1，即现值+1，并重新赋值原值
+            //对应上文，则为 cardsCount+offset 的结果赋值原值
+            //假设cardsCount=4，传值 1，则为4+1=5，传值-1，则为 4-1=3
+
         }, label: {
-        Image(systemName: "rectangle.stack.badge.plus.fill")
-        Text("添加卡片")
+            Image(systemName: symbol)
+            Text(txt)
         }).buttonStyle(.bordered)
+    }
+    
+    var CardAdder:some View{
+        ButtonSimplify(by: 1, symbol: "rectangle.stack.badge.plus.fill", txt:"添加卡片")
+        
         }
         
     var CardRemover:some View{
-        Button(action: {if cardsCount < emojis.count{
-        cardsCount -=  1
-        }
-        }, label: {
-        Image(systemName: "rectangle.stack.badge.minus.fill")
-        Text("删除卡片")
-        }).buttonStyle(.bordered)
+        ButtonSimplify(by: -1, symbol:"rectangle.stack.badge.minus.fill", txt: "删除卡片")
         }
 }
 
