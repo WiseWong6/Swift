@@ -27,31 +27,39 @@ struct ContentView: View {
             .foregroundColor(.orange)
         
             HStack{
-                Button(action: {
-                    if cardsCount < emojis.count{
-                        cardsCount +=  1
-                    }
-                }, label: {
-                    Image(systemName: "rectangle.stack.badge.minus.fill")
-                    Text("添加卡片")
-                }).buttonStyle(.bordered)
+                CardAdder
                 Spacer()
-                Button(action: {
-                    if cardsCount > 1{
-                        cardsCount -=  1
-                    }
-                }, label: {
-                    Image(systemName: "rectangle.stack.badge.minus.fill")
-                    Text("删除卡片")
-                }).buttonStyle(.bordered)
+                CardRemover
+    
             }.font(.headline)
         }
-       
 
-        
+
         .padding()
     }
+    
+    var CardAdder:some View{
+        Button(action: {if cardsCount < emojis.count{
+        cardsCount +=  1
+        }
+        }, label: {
+        Image(systemName: "rectangle.stack.badge.plus.fill")
+        Text("添加卡片")
+        }).buttonStyle(.bordered)
+        }
+        
+    var CardRemover:some View{
+        Button(action: {if cardsCount < emojis.count{
+        cardsCount -=  1
+        }
+        }, label: {
+        Image(systemName: "rectangle.stack.badge.minus.fill")
+        Text("删除卡片")
+        }).buttonStyle(.bordered)
+        }
 }
+
+
 
 struct CardView:View {
     var content:String
