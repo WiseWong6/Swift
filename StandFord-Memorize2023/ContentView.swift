@@ -13,24 +13,32 @@ struct ContentView: View {
     
     var body: some View {
         VStack{
-            Cards
+            ScrollView{
+                Cards
+            }
+            Spacer()
             CardsCountAdjuster
         }
         .padding()
     }
     var Cards:some View{
-        HStack {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120.0))], content: {
+            //LazyVGrid，是一种网格函数，columns 可以指定函数列，不能使用数字，要使用网格项数组
+            //GridItem 有一种自适应方法，但需要指定最小宽邸
+        
             ForEach(0..<cardsCount,id: \.self) { index in
             CardView(content: emojis[index])
+                .aspectRatio(2/3, contentMode: .fill)
             //ForEach的 range 使用 cardsCount 的初始值设定范围
             //id:\.self,使用这个范围作为唯一标识符
             //index 则为变量则为这个元素的索引
             //in是语法的一部分，表示分隔前面的集合和后面的闭包参数，也指明将遍历集合每个参数所带来的元素值
+            //aspectRatio是宽高比,含有参数 aspect ratio，2/3即宽度和高度的比例
+            //contentMode是内容模式，前侧指定了宽高比，.fill 则拉伸来完成这个宽高比,看最新语法只有 fill 和 fit，前者是填充，后者是缩放
             }
-           
-        }
-        .foregroundColor(.orange)
+        }).foregroundColor(.orange)
     }
+    
     var CardsCountAdjuster:some View{
         HStack{
             CardAdder
@@ -48,11 +56,12 @@ struct ContentView: View {
             //参考cardsCount +=  1，即 cardsCount=cardsCount+1，即现值+1，并重新赋值原值
             //对应上文，则为 cardsCount+offset 的结果赋值原值
             //假设cardsCount=4，传值 1，则为4+1=5，传值-1，则为 4-1=3
+            print("\(cardsCount)")
 
         }, label: {
             Image(systemName: symbol)
             Text(txt)
-        }).buttonStyle(.bordered)
+        }).buttonStyle(.bordered).disabled(cardsCount + offset > emojis.count || cardsCount + offset < 1)
     }
     
     var CardAdder:some View{
