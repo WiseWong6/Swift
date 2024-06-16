@@ -13,36 +13,37 @@ import SwiftUI
 class EmojiMemoryGame :ObservableObject{
     private static let emojis = ["👹", "🤡", "👻", "👿", "💀", "☠️", "👽", "👾", "🤖", "🎃", "👺", "🤠"]
 
+    //对于 ViewModel 来说，需要使用 model 的方法，首先需要拥有 1 个 model
+    //model的初始值等于 creatMemoryGame 函数的返回值
+    @Published private var model = createMemoryGame()
+
+    //定义createMemoryGame函数，返回 MemoryGame<String>对象
+    //传入卡片对数量是 16 对，初始化card 和 cards 卡片组
+    //MemoryGame里使用 numberOfPairsOfCards 的时候还需要对内容进行初始化，后面的闭包实际上在返回 content
+    //index会自动递增，基于语言的特点。
+    //如果 emojis 的范围包含某个索引则返回某个索引的值，否则返回特殊符号
+    // 设置为static表示全局函数
+
     private static func createMemoryGame() -> MemoryGame<String> {
-        return MemoryGame(numberOfPairsOfCards: 16) { pairIndex in
-            if emojis.indices.contains(pairIndex) {
-                return emojis[pairIndex]
+        return MemoryGame(numberOfPairsOfCards: 12) { index in
+            if emojis.indices.contains(index) {
+                return emojis[index]
             } else {
                 return "⁉️"
             }
         }
     }
-
-    // 初始化一个 model 变量，调用Model 的 MemoryGame 结构体，String 是卡片的内容
-    // 设置private过后，只有这个ViewModel能够调用这个model
-    // 设置为static表示全局函数
-
-    @Published private var model = createMemoryGame()
-
+    
+    // 初始化一个卡片的变量，定义为数组，并且调用 Model 里的 MemoryGame 中 Card 的结构体
     var cards: [MemoryGame<String>.Card] {
         return model.cards
     }
-
-    // 初始化一个卡片的变量，定义为数组，并且调用 Model 里的 MemoryGame 中 Card 的结构体
     
     //Mark: - Intents 
     func shuffle(){
         model.shuffle()
-        objectWillChange.send()
     }
     func choose(_ card: MemoryGame<String>.Card) {
         model.choose(card)
     }
-    // 初始化一个方法，变量名称是 card，值的结构是 Model 中的卡片类型
-    // 变量传入部分和方法部分看不懂
 }
